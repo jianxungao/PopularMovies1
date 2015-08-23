@@ -49,7 +49,7 @@ public class MainFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState){
-        outState.putParcelableArrayList("MyMovies", MyMovieList.getMyMovies());
+        outState.putParcelableArrayList("MyMovies", mMoiveList);
         super.onSaveInstanceState(outState);
     }
 
@@ -58,12 +58,11 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         getActivity().setTitle(R.string.movies_title);
         if(savedInstanceState == null || !savedInstanceState.containsKey("MyMovies")){
-            mMoiveList = new ArrayList<MyMovie>();
-            Log.d(TAG, " -- new --");
+            mMoiveList = new ArrayList<>();
+            Log.d(TAG, " --- new ---");
         }else {
-            mMoiveList = MyMovieList.getMyMovies();
-            //mMoiveList = savedInstanceState.getParcelableArrayList("MyMovies");
-            Log.d(TAG, " -- old --");
+            mMoiveList = savedInstanceState.getParcelableArrayList("MyMovies");
+            Log.d(TAG, " --- old ---");
         }
         Log.d(TAG, "onCreate() called");
     }
@@ -72,7 +71,6 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //mAdapter = new MovieAdapter(getActivity(), new ArrayList<MyMovie>());
         mAdapter = new MovieAdapter(getActivity(), mMoiveList);
 
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -86,7 +84,7 @@ public class MainFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 MyMovie myMovie = mAdapter.getItem(position);
                 Intent intent = new Intent(getActivity(), DetailActivity.class)
-                        .putExtra(Intent.EXTRA_TEXT, myMovie.getId());
+                        .putExtra(Intent.EXTRA_TEXT, myMovie);
                 startActivity(intent);
             }
         });
@@ -156,8 +154,8 @@ public class MainFragment extends Fragment {
             JSONObject moviesJson = new JSONObject(moviesJsonStr);
             JSONArray moviesArray = moviesJson.getJSONArray(MV_RESULTS);
 
-            ArrayList<MyMovie> movieList = new ArrayList<MyMovie>();
 
+            mMoiveList = new ArrayList<>();
             for (int i = 0; i < moviesArray.length(); i++) {
 
                 // Get the JSON object reference
@@ -176,19 +174,14 @@ public class MainFragment extends Fragment {
                 //create a MyMovie object each time and put to an array list
                 MyMovie m = new MyMovie(id, title, popularity, vote_avg, releaseDate, description,
                         posterPath, backdropPath, video);
-                movieList.add(m);
-
+                mMoiveList.add(m);
             }
 
-            for (MyMovie s : movieList) {
+            for (MyMovie s : mMoiveList) {
                 Log.d(TAG, "Movie entry: " + s.getPath());
             }
 
-            //set the MyMovieList to hold the movie data for sharing between activities
-            MyMovieList myMovieList = MyMovieList.get(getActivity());
-            myMovieList.setMyMovies(movieList);
-
-            return movieList;
+            return mMoiveList;
 
         }
 
@@ -290,8 +283,8 @@ public class MainFragment extends Fragment {
 
             if (result != null) {
                 mAdapter.clear();
-                for (MyMovie moviesStr : result) {
-                    mAdapter.add(moviesStr);
+                for (MyMovie m : result) {
+                    mAdapter.add(m);
 
                 }
             }
