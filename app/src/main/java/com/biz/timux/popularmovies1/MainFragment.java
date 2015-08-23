@@ -39,7 +39,7 @@ public class MainFragment extends Fragment {
 
     private static final String TAG = MainFragment.class.getSimpleName();
 
-    private ArrayList<MyMovie> mMoivesList;
+    private ArrayList<MyMovie> mMoiveList;
     private MovieAdapter mAdapter;
     //default sort by value
     private String mSortBy = "popularity.desc";
@@ -58,11 +58,11 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         getActivity().setTitle(R.string.movies_title);
         if(savedInstanceState == null || !savedInstanceState.containsKey("MyMovies")){
-            mMoivesList = new ArrayList<MyMovie>();
+            mMoiveList = new ArrayList<MyMovie>();
             Log.d(TAG, " -- new --");
         }else {
-            //mMoivesList = MyMovieList.getMyMovies();
-            mMoivesList = savedInstanceState.getParcelableArrayList("MyMovies");
+            mMoiveList = MyMovieList.getMyMovies();
+            //mMoiveList = savedInstanceState.getParcelableArrayList("MyMovies");
             Log.d(TAG, " -- old --");
         }
         Log.d(TAG, "onCreate() called");
@@ -73,7 +73,7 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         //mAdapter = new MovieAdapter(getActivity(), new ArrayList<MyMovie>());
-        mAdapter = new MovieAdapter(getActivity(), mMoivesList);
+        mAdapter = new MovieAdapter(getActivity(), mMoiveList);
 
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
