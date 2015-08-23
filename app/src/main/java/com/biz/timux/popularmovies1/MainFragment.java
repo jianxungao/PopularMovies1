@@ -119,6 +119,8 @@ public class MainFragment extends Fragment {
         }
         if (isNetworkAvailable()){
             uTask.execute();
+        }else {
+            Log.d(TAG, "Network problems!");
         }
 
     }
