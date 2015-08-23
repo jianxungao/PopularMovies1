@@ -61,7 +61,8 @@ public class MainFragment extends Fragment {
             mMoivesList = new ArrayList<MyMovie>();
             Log.d(TAG, " -- new --");
         }else {
-            mMoivesList = MyMovieList.getMyMovies();
+            //mMoivesList = MyMovieList.getMyMovies();
+            mMoivesList = savedInstanceState.getParcelableArrayList("MyMovies");
             Log.d(TAG, " -- old --");
         }
         Log.d(TAG, "onCreate() called");
@@ -120,7 +121,7 @@ public class MainFragment extends Fragment {
         if (isNetworkAvailable()){
             uTask.execute();
         }else {
-            Log.d(TAG, "Network problems!");
+            Log.d(TAG, "Network problem");
         }
 
     }
